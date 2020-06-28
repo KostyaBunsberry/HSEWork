@@ -8,16 +8,17 @@
 
 import UIKit
 
-class MainController: UIViewController {
+class MainController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var firstValuePickerView: UIPickerView!
     @IBOutlet weak var secondValuePickerView: UIPickerView!
     @IBOutlet weak var firstValueTextfield: UITextField!
     @IBOutlet weak var secondValueTextfield: UITextField!
-    
-    var currencyModelPicker: CurrencyModelPicker!
-    var secondModelPicker: SecondPicker!
+
     var rotationAngle: CGFloat!
+    var customWidth: CGFloat!
+    var customHeight: CGFloat!
+    var modelData: [CurrencyModel]!
     
     var multiplier: Float!
     public static var exchange: ExchangeCore!
@@ -30,16 +31,15 @@ class MainController: UIViewController {
         
         setupTextFields()
         
-        currencyModelPicker = CurrencyModelPicker()
-        currencyModelPicker.modelData = Data.getData()
+        customWidth = 100
+        customHeight = 100
         
-        secondModelPicker = SecondPicker()
-        secondModelPicker.modelData = Data.getData()
+        modelData = Data.getData()
 
-        firstValuePickerView.delegate = currencyModelPicker
-        secondValuePickerView.delegate = secondModelPicker
-        firstValuePickerView.dataSource = currencyModelPicker
-        secondValuePickerView.dataSource = currencyModelPicker
+        firstValuePickerView.dataSource = self
+        secondValuePickerView.dataSource = self
+        firstValuePickerView.delegate = self
+        secondValuePickerView.delegate = self
         
         let firstY = firstValuePickerView.frame.origin.y
         rotationAngle = -90 * (.pi/180)
@@ -93,6 +93,73 @@ class MainController: UIViewController {
         firstValueTextfield.text! =  String(second / MainController.exchange.multiplier)
     }
     
+    @IBAction func firstValueAccessed(_ sender: Any) {
+        firstValueTextfield.text! = ""
+        secondValueTextfield.text! = ""
+    }
     
+    @IBAction func secondValueAccessed(_ sender: Any) {
+        firstValueTextfield.text! = ""
+        secondValueTextfield.text! = ""
+    }
+    
+    // Picker View Delegate
+    
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return customHeight
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: customWidth, height: customHeight))
+        
+        let topLabel = UILabel(frame: CGRect(x: 0, y: 10, width: customWidth, height: 15))
+        topLabel.text = modelData[row].country
+        topLabel.textAlignment = .center
+        topLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.thin)
+        view.addSubview(topLabel)
+        
+        let middleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: customWidth, height: customHeight))
+        middleLabel.text = modelData[row].code
+        middleLabel.textAlignment = .center
+        middleLabel.font = UIFont.systemFont(ofSize: 42, weight: UIFont.Weight.regular)
+        view.addSubview(middleLabel)
+        
+        let bottomLabel = UILabel(frame: CGRect(x: 0, y: 78, width: customWidth, height: 15))
+        bottomLabel.text = modelData[row].name
+        bottomLabel.textAlignment = .center
+        bottomLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.thin)
+        view.addSubview(bottomLabel)
+        
+        view.transform = CGAffineTransform(rotationAngle: (90 * (.pi/180)))
+        
+        return view
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch pickerView {
+        
+        case firstValuePickerView:
+            MainController.exchange.newFirst(modelData[row].code)
+            
+        case secondValuePickerView:
+            MainController.exchange.newSecond(modelData[row].code)
+            
+        default:
+            print("Whut?")
+        }
+        
+        firstValueTextfield.text! = ""
+        secondValueTextfield.text! = ""
+    }
+    
+    // Picker View Data Source
+
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return modelData.count
+    }
     
 }
