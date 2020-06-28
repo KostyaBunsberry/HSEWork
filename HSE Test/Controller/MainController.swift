@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class MainController: UIViewController {
 
     @IBOutlet weak var firstValuePickerView: UIPickerView!
     @IBOutlet weak var secondValuePickerView: UIPickerView!
@@ -35,11 +35,6 @@ class MainController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         customHeight = 100
         
         modelData = Data.getData()
-
-        firstValuePickerView.dataSource = self
-        secondValuePickerView.dataSource = self
-        firstValuePickerView.delegate = self
-        secondValuePickerView.delegate = self
         
         let firstY = firstValuePickerView.frame.origin.y
         rotationAngle = -90 * (.pi/180)
@@ -93,15 +88,9 @@ class MainController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         firstValueTextfield.text! =  String(second / MainController.exchange.multiplier)
     }
     
-    @IBAction func firstValueAccessed(_ sender: Any) {
-        firstValueTextfield.text! = ""
-        secondValueTextfield.text! = ""
-    }
-    
-    @IBAction func secondValueAccessed(_ sender: Any) {
-        firstValueTextfield.text! = ""
-        secondValueTextfield.text! = ""
-    }
+}
+
+extension MainController: UIPickerViewDelegate, UIPickerViewDataSource {
     
     // Picker View Delegate
     
@@ -141,11 +130,13 @@ class MainController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         case firstValuePickerView:
             MainController.exchange.newFirst(modelData[row].code)
             
+            // 2DO Make async fucntioning change of textfields when i know how to
+            
         case secondValuePickerView:
             MainController.exchange.newSecond(modelData[row].code)
             
         default:
-            print("Whut?")
+            print("A picker view switch error")
         }
         
         firstValueTextfield.text! = ""

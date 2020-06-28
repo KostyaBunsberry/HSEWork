@@ -20,10 +20,18 @@
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2t5-RF-nn8" userLabel="First Picker View">
                                 <rect key="frame" x="0.0" y="236" width="414" height="150"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="RKI-Cc-nfd"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="g7z-EX-kfQ"/>
+                                </connections>
                             </pickerView>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Umd-Tx-kjd" userLabel="Second Picker View">
                                 <rect key="frame" x="0.0" y="534" width="414" height="150"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="EjA-Iw-pAq"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="ChL-3Z-UTd"/>
+                                </connections>
                             </pickerView>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Inout Value" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="xMr-kT-dhx">
                                 <rect key="frame" x="57" y="384" width="300" height="34"/>
@@ -31,7 +39,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad"/>
                                 <connections>
-                                    <action selector="firstValueAccessed:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="Uu8-ki-AQt"/>
                                     <action selector="firstValueChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="wvd-73-cNE"/>
                                 </connections>
                             </textField>
@@ -41,7 +48,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad"/>
                                 <connections>
-                                    <action selector="secondValueAccessed:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="nmy-RX-zWb"/>
                                     <action selector="secondValueChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="SFu-PJ-6He"/>
                                 </connections>
                             </textField>
